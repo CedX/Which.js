@@ -16,7 +16,7 @@ describe("ResultSet", () => {
 				const executables = await promise;
 				ok(Array.isArray(executables));
 				equal(executables.length, 1);
-				ok(executables[0].endsWith("\\res\\Executable.cmd"));
+				ok(executables[0].endsWith("\\Resources\\Executable.cmd"));
 			}
 		});
 
@@ -27,7 +27,7 @@ describe("ResultSet", () => {
 				const executables = await promise;
 				ok(Array.isArray(executables));
 				equal(executables.length, 1);
-				ok(executables[0].endsWith("/res/Executable.sh"));
+				ok(executables[0].endsWith("/Resources/Executable.sh"));
 			}
 		});
 
@@ -45,7 +45,7 @@ describe("ResultSet", () => {
 			if (!Finder.isWindows) await rejects(promise);
 			else {
 				const executable = await promise;
-				ok(executable.endsWith("\\res\\Executable.cmd"));
+				ok(executable.endsWith("\\Resources\\Executable.cmd"));
 			}
 		});
 
@@ -54,7 +54,7 @@ describe("ResultSet", () => {
 			if (Finder.isWindows) await rejects(promise);
 			else {
 				const executable = await promise;
-				ok(executable.endsWith("/res/Executable.sh"));
+				ok(executable.endsWith("/Resources/Executable.sh"));
 			}
 		});
 
@@ -70,7 +70,7 @@ describe("ResultSet", () => {
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			let found = false;
 			for await (const executable of which("Executable", options)) {
-				ok(executable.endsWith("\\res\\Executable.cmd"));
+				ok(executable.endsWith("\\Resources\\Executable.cmd"));
 				found = true;
 			}
 
@@ -80,7 +80,7 @@ describe("ResultSet", () => {
 		it("should return the path of the `Executable.sh` file on POSIX", async () => {
 			let found = false;
 			for await (const executable of which("Executable.sh", options)) {
-				ok(executable.endsWith("/res/Executable.sh"));
+				ok(executable.endsWith("/Resources/Executable.sh"));
 				found = true;
 			}
 

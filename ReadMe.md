@@ -2,8 +2,8 @@
 Find the instances of an executable in the system path, in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript).
 
 ## Documentation
-- [User guide](https://github.com/CedX/Which.js/tree/main/docs)
-- [Examples](https://github.com/CedX/Which.js/tree/main/example)
+- [User guide](https://github.com/CedX/Which.js/tree/main/Documentation)
+- [Examples](https://github.com/CedX/Which.js/tree/main/Examples)
 
 ## Development
 - [Git repository](https://github.com/CedX/Which.js)
