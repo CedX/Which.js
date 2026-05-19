@@ -26,7 +26,7 @@ describe("Finder", () => {
 	});
 
 	describe("find()", () => {
-		const finder = new Finder({paths: ["res"]});
+		const finder = new Finder({paths: ["Resources"]});
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			const executables = await Array.fromAsync(finder.find("Executable"));

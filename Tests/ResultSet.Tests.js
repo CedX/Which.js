@@ -7,7 +7,7 @@ import {describe, it} from "node:test";
  */
 describe("ResultSet", () => {
 	describe("all", () => {
-		const options = {paths: ["res"]};
+		const options = {paths: ["Resources"]};
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			const promise = which("Executable", options).all;
@@ -38,7 +38,7 @@ describe("ResultSet", () => {
 	});
 
 	describe("first", () => {
-		const options = {paths: ["res"]};
+		const options = {paths: ["Resources"]};
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			const promise = which("Executable", options).first;
@@ -65,7 +65,7 @@ describe("ResultSet", () => {
 	});
 
 	describe("[Symbol.asyncIterator]()", () => {
-		const options = {paths: ["res"]};
+		const options = {paths: ["Resources"]};
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			let found = false;
