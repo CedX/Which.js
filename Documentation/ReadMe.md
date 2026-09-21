@@ -18,7 +18,7 @@ This function takes the name of the command to locate, and returns a `ResultSet`
 The `ResultSet` class implements the [async iterable protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols).  
 It is therefore possible to iterate over the results using a `for await...of` loop:
 
-```js
+```typescript
 import {which} from "@cedx/which";
 import console from "node:console";
 
@@ -40,7 +40,7 @@ The `ResultSet` class also provides two convenient properties:
 The `ResultSet.all` property returns a `Promise` that resolves with the absolute paths of all instances of an executable found in the system path.
 If the executable could not be located, the promise rejects.
 
-```js
+```typescript
 import console from "node:console";
 import {which} from "@cedx/which";
 
@@ -58,7 +58,7 @@ catch (error) {
 The `ResultSet.first` property returns a `Promise` that resolves with the absolute path of the first instance of an executable found in the system path.
 If the executable could not be located, the promise rejects.
 
-```js
+```typescript
 import console from "node:console";
 import {which} from "@cedx/which";
 
@@ -78,7 +78,7 @@ The behavior of the `which(command: string, options?: FinderOptions)` function c
 An array of strings specifying the list of executable file extensions.
 On Windows, defaults to the list of extensions provided by the `PATHEXT` environment variable.
 
-```js
+```typescript
 which("foobar", {extensions: [".foo", ".exe", ".cmd"]});
 ```
 
@@ -90,6 +90,6 @@ which("foobar", {extensions: [".foo", ".exe", ".cmd"]});
 An array of strings specifying the system paths from which the given command will be searched.
 Defaults to the list of directories provided by the `PATH` environment variable.
 
-```js
+```typescript
 which("foobar", {paths: ["/usr/local/bin", "/usr/bin"]});
 ```
