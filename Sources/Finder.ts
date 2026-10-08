@@ -90,14 +90,19 @@ export class Finder {
 		if (perms & 0o001) return true;
 
 		// Group.
-		const gid = typeof process.getgid == "function" ? process.getgid() : -1;
-		if (perms & 0o010) return gid == stats.gid;
+		if (perms & 0o010) {
+			const gid = typeof process.getgid == "function" ? process.getgid() : -1;
+			return gid == stats.gid;
+		}
 
 		// Owner.
-		const uid = typeof process.getuid == "function" ? process.getuid() : -1;
-		if (perms & 0o100) return uid == stats.uid;
+		if (perms & 0o100) {
+			const uid = typeof process.getuid == "function" ? process.getuid() : -1;
+			return uid == stats.uid;
+		}
 
 		// Root.
+		const uid = typeof process.getuid == "function" ? process.getuid() : -1;
 		return (perms & (0o100 | 0o010)) != 0 && uid == 0;
 	}
 
