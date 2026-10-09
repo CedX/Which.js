@@ -11,12 +11,12 @@ export class Finder {
 	/**
 	 * The list of executable file extensions.
 	 */
-	readonly extensions: Set<string>;
+	#extensions: string[];
 
 	/**
 	 * The list of system paths.
 	 */
-	readonly paths: Set<string>;
+	#paths: string[];
 
 	/**
 	 * Creates a new finder.
@@ -35,8 +35,8 @@ export class Finder {
 			paths = pathEnv ? pathEnv.split(Finder.isWindows ? ";" : delimiter) : [];
 		}
 
-		this.extensions = new Set(extensions.map(extension => extension.toLowerCase()));
-		this.paths = new Set(paths.map(item => item.replace(/^"|"$/g, "")).filter(item => item.length));
+		this.#extensions = extensions;
+		this.#paths = paths;
 	}
 
 	/**
@@ -44,6 +44,26 @@ export class Finder {
 	 */
 	static get isWindows(): boolean {
 		return process.platform == "win32" || ["cygwin", "msys"].includes(process.env.OSTYPE ?? "");
+	}
+
+	/**
+	 * The list of executable file extensions.
+	 */
+	get extensions(): string[] {
+		return this.#extensions;
+	}
+	set extensions(value: string[]) {
+		this.#extensions = value.map(extension => extension.toLowerCase());
+	}
+
+	/**
+	 * The list of system paths.
+	 */
+	get paths(): string[] {
+		return this.#paths;
+	}
+	set paths(value: string[]) {
+		this.#paths = value.map(path => path.replace(/^"|"$/g, ""));
 	}
 
 	/**
@@ -76,7 +96,7 @@ export class Finder {
 	 * @returns `true` if the specified file is executable, otherwise `false`.
 	 */
 	#checkFileExtension(file: string): boolean {
-		return this.extensions.has(extname(file).toLowerCase());
+		return this.extensions.includes(extname(file).toLowerCase());
 	}
 
 	/**
