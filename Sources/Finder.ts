@@ -35,8 +35,8 @@ export class Finder {
 			paths = pathEnv ? pathEnv.split(Finder.isWindows ? ";" : delimiter) : [];
 		}
 
-		this.#extensions = extensions;
-		this.#paths = paths;
+		this.#extensions = extensions.map(extension => extension.toLowerCase());
+		this.#paths = paths.map(path => path.replace(/^"|"$/g, ""));
 	}
 
 	/**

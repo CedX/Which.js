@@ -1,100 +1,99 @@
 import {Finder, which} from "@cedx/which";
-import {equal, ok, rejects} from "node:assert/strict";
-import {describe, it} from "node:test";
+import {use} from "chai";
+import chaiAsPromised from "chai-as-promised";
+import "chai/register-should.js";
 
 /**
  * Tests the features of the {@link ResultSet} class.
  */
 describe("ResultSet", () => {
-	describe("all", () => {
+	use(chaiAsPromised);
+
+	context("all", () => {
 		const options = {paths: ["Resources"]};
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			const promise = which("Executable", options).all;
-			if (!Finder.isWindows) await rejects(promise);
-			else {
-				const executables = await promise;
-				ok(Array.isArray(executables));
-				equal(executables.length, 1);
-				ok(executables[0].endsWith("\\Resources\\Executable.cmd"));
-			}
+			if (!Finder.isWindows) return promise.should.be.rejected;
+
+			const executables = await promise;
+			Array.isArray(executables).should.be.true;
+			executables.should.have.lengthOf(1);
+			executables[0].endsWith("\\Resources\\Executable.cmd").should.be.true;
 		});
 
 		it("should return the path of the `Executable.sh` file on POSIX", async () => {
 			const promise = which("Executable.sh", options).all;
-			if (Finder.isWindows) await rejects(promise);
-			else {
-				const executables = await promise;
-				ok(Array.isArray(executables));
-				equal(executables.length, 1);
-				ok(executables[0].endsWith("/Resources/Executable.sh"));
-			}
+			if (Finder.isWindows) return promise.should.be.rejected;
+
+			const executables = await promise;
+			Array.isArray(executables).should.be.true;
+			executables.should.have.lengthOf(1);
+			executables[0].endsWith("/Resources/Executable.sh").should.be.true;
 		});
 
 		it("should reject if the searched command is not executable or not found", async () => {
-			await rejects(() => which("NotExecutable.sh", options).all);
-			return rejects(() => which("foo", options).all);
+			await which("NotExecutable.sh", options).all.should.be.rejected;
+			return which("foo", options).all.should.be.rejected;
 		});
 	});
 
-	describe("first", () => {
+	context("first", () => {
 		const options = {paths: ["Resources"]};
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			const promise = which("Executable", options).first;
-			if (!Finder.isWindows) await rejects(promise);
-			else {
-				const executable = await promise;
-				ok(executable.endsWith("\\Resources\\Executable.cmd"));
-			}
+			if (!Finder.isWindows) return promise.should.be.rejected;
+
+			const executable = await promise;
+			executable.endsWith("\\Resources\\Executable.cmd").should.be.true;
 		});
 
 		it("should return the path of the `Executable.sh` file on POSIX", async () => {
 			const promise = which("Executable.sh", options).first;
-			if (Finder.isWindows) await rejects(promise);
-			else {
-				const executable = await promise;
-				ok(executable.endsWith("/Resources/Executable.sh"));
-			}
+			if (Finder.isWindows) return promise.should.be.rejected;
+
+			const executable = await promise;
+			executable.endsWith("/Resources/Executable.sh").should.be.true;
 		});
 
 		it("should reject if the searched command is not executable or not found", async () => {
-			await rejects(() => which("NotExecutable.sh", options).first);
-			return rejects(() => which("foo", options).first);
+			await which("NotExecutable.sh", options).first.should.be.rejected;
+			return which("foo", options).first.should.be.rejected;
 		});
 	});
 
-	describe("[Symbol.asyncIterator]()", () => {
+	context("[Symbol.asyncIterator]()", () => {
 		const options = {paths: ["Resources"]};
 
 		it("should return the path of the `Executable.cmd` file on Windows", async () => {
 			let found = false;
 			for await (const executable of which("Executable", options)) {
-				ok(executable.endsWith("\\Resources\\Executable.cmd"));
+				executable.endsWith("\\Resources\\Executable.cmd").should.be.true;
 				found = true;
 			}
 
-			equal(found, Finder.isWindows);
+			found.should.equal(Finder.isWindows);
 		});
 
 		it("should return the path of the `Executable.sh` file on POSIX", async () => {
 			let found = false;
 			for await (const executable of which("Executable.sh", options)) {
-				ok(executable.endsWith("/Resources/Executable.sh"));
+				executable.endsWith("/Resources/Executable.sh").should.be.true;
 				found = true;
 			}
 
-			equal(found, !Finder.isWindows);
+			found.should.not.equal(Finder.isWindows);
 		});
 
 		it("should not return any result if the searched command is not executable or not found", async () => {
 			let found = false;
 			for await (const _ of which("NotExecutable.sh", options)); // eslint-disable-line @typescript-eslint/no-unused-vars
-			ok(!found);
+			found.should.be.false;
 
 			found = false;
 			for await (const _ of which("foo", options)); // eslint-disable-line @typescript-eslint/no-unused-vars
-			ok(!found);
+			found.should.be.false;
 		});
 	});
 });
