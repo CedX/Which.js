@@ -1,5 +1,4 @@
 import {Finder} from "@cedx/which";
-import "chai/register-should.js";
 import {delimiter} from "node:path";
 import {env} from "node:process";
 
