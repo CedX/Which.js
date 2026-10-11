@@ -32,7 +32,7 @@ export class Finder {
 
 		if (!paths.length) {
 			const pathEnv = process.env.PATH ?? "";
-			paths = pathEnv ? pathEnv.split(Finder.isWindows ? ";" : delimiter) : [];
+			paths = pathEnv ? pathEnv.split(delimiter) : [];
 		}
 
 		this.#extensions = extensions.map(extension => extension.toLowerCase());
@@ -43,7 +43,7 @@ export class Finder {
 	 * Value indicating whether the current platform is Windows.
 	 */
 	static get isWindows(): boolean {
-		return process.platform == "win32" || ["cygwin", "msys"].includes(process.env.OSTYPE ?? "");
+		return process.platform == "win32";
 	}
 
 	/**

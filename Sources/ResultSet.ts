@@ -1,5 +1,5 @@
 import {delimiter} from "node:path";
-import {Finder} from "./Finder.js";
+import type {Finder} from "./Finder.js";
 
 /**
  * Provides convenient access to the stream of search results.
@@ -73,7 +73,7 @@ export class ResultSet implements AsyncIterable<string, void, void> {
 	 * @throws `Error` when that the command was not found.
 	 */
 	#throw(): never {
-		const paths = Array.from(this.#finder.paths).join(Finder.isWindows ? ";" : delimiter);
+		const paths = Array.from(this.#finder.paths).join(delimiter);
 		throw new Error(`No "${this.#command}" in (${paths}).`);
 	}
 }
