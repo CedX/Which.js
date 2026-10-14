@@ -1,5 +1,5 @@
 import type {Stats} from "node:fs";
-import {stat} from "node:fs/promises";
+import {access, constants, stat} from "node:fs/promises";
 import {delimiter, extname, resolve} from "node:path";
 import process from "node:process";
 
@@ -82,48 +82,15 @@ export class Finder {
 	 */
 	async isExecutable(file: string): Promise<boolean> {
 		try {
-			const fileStats = await stat(file);
-			return fileStats.isFile() && (Finder.isWindows ? this.#checkFileExtension(file) : this.#checkFilePermissions(fileStats));
+			switch ((await stat(file)).isFile()) {
+				case true && Finder.isWindows: return this.extensions.includes(extname(file).toLowerCase());
+				case true: await access(file, constants.X_OK); return true;
+				default: return false;
+			}
 		}
 		catch {
 			return false;
 		}
-	}
-
-	/**
-	 * Checks that the specified file is executable according to the executable file extensions.
-	 * @param file The path of the file to be checked.
-	 * @returns `true` if the specified file is executable, otherwise `false`.
-	 */
-	#checkFileExtension(file: string): boolean {
-		return this.extensions.includes(extname(file).toLowerCase());
-	}
-
-	/**
-	 * Checks that the specified file is executable according to its permissions.
-	 * @param stats A reference to the file to be checked.
-	 * @returns `true` if the specified file is executable, otherwise `false`.
-	 */
-	#checkFilePermissions(stats: Stats): boolean {
-		// Others.
-		const perms = stats.mode;
-		if (perms & 0o001) return true;
-
-		// Group.
-		if (perms & 0o010) {
-			const gid = typeof process.getgid == "function" ? process.getgid() : -1;
-			return gid == stats.gid;
-		}
-
-		// Owner.
-		if (perms & 0o100) {
-			const uid = typeof process.getuid == "function" ? process.getuid() : -1;
-			return uid == stats.uid;
-		}
-
-		// Root.
-		const uid = typeof process.getuid == "function" ? process.getuid() : -1;
-		return (perms & (0o100 | 0o010)) != 0 && uid == 0;
 	}
 
 	/**
