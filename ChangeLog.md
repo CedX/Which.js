@@ -1,6 +1,7 @@
 # Changelog
 
 ## Version [2026.10.0](https://github.com/CedX/Which.js/compare/v12.0.0...v2026.10.0)
+- Breaking change: raised the required [Node.js](https://nodejs.org) version.
 - Breaking change: removed the command line interface.
 - Breaking change: the `extensions` and `paths` properties of the `Finder` class are now implemented as `string[]`.
 - Switched to a year-based versioning.
