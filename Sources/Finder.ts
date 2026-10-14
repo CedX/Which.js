@@ -1,4 +1,3 @@
-import type {Stats} from "node:fs";
 import {access, constants, stat} from "node:fs/promises";
 import {delimiter, extname, resolve} from "node:path";
 import process from "node:process";
@@ -82,11 +81,9 @@ export class Finder {
 	 */
 	async isExecutable(file: string): Promise<boolean> {
 		try {
-			switch ((await stat(file)).isFile()) {
-				case true && Finder.isWindows: return this.extensions.includes(extname(file).toLowerCase());
-				case true: await access(file, constants.X_OK); return true;
-				default: return false;
-			}
+			if (!(await stat(file)).isFile()) return false;
+			if (Finder.isWindows) return this.extensions.includes(extname(file).toLowerCase());
+			await access(file, constants.X_OK); return true;
 		}
 		catch {
 			return false;
