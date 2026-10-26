@@ -10,8 +10,8 @@ import pkg from "../package.json" with {type: "json"};
  * @param {string} path The path of the directory to clean.
  */
 export function clearItem(path) {
-	for (const fileSystemEntry of readdirSync(path))
-		if (fileSystemEntry != ".gitkeep") removeItem(join(path, fileSystemEntry));
+	for (const entry of readdirSync(path))
+		if (entry != ".gitkeep") removeItem(join(path, entry));
 }
 
 /**
